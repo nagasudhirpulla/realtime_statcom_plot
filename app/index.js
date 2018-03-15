@@ -5,21 +5,20 @@ window.onload = function () {
     apiServerBaseAddress = document.getElementById("serverBaseAddressInput").value;
     initializePlotDiv();
     fetchOperatingPointValue();
-    timerId = setInterval(fetchOperatingPointValue, 60000);
+    timerId = setInterval(fetchOperatingPointValue, 500);
 };
 
 // todo use relevant id here
 var payLoadSources_g = [
     {
         name: 'Satna_STATCOM_x_value',
-        url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA1.A0047000', 'real')
+        url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA3.A0106099', 'real')
     },
     {
         name: 'Satna_STATCOM_y_value',
-        url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA1.A0047000', 'real')
+        url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA3.A0106098', 'real')
     }];
 
-// not required now
 var computeXYFromResult = function (result) {
     // todo calculate x and y values from result
     return {
@@ -43,7 +42,7 @@ function fetchOperatingPointValue() {
         var plotDiv = document.getElementById('plotDiv');
 
         // updating the plot operating point
-        if(results.constructor === Array && results.length >= 2){
+        if (results.constructor === Array && results.length >= 2) {
             var x_result = results[0];
             var y_result = results[1];
             plotDiv.data[0].x = [x_result["dval"]];
@@ -90,18 +89,77 @@ function initializePlotDiv() {
     };
 
     var trace_ref_characteristic = {
-        x: [-5, -3, 3, 5],
-        y: [-5, -5, 5, 5],
+        x: [-1.188, -1.452, -0.417, -0.444, 0, 0, 0.415, 0.791, 1.732, 2.033, 1.732, 0.791, 0.754, 0.392, 0.415, 0.392, 0, 0, 0, -0.417],
+        y: [0.3, 0.9, 0.95, 1.01, 1.01, 1.05, 1.05, 1.05, 1.1, 1.5, 1.1, 1.05, 0.99, 0.99, 1.05, 0.99, 0.99, 1.01, 0.95, 0.95],
         mode: 'lines',
         line: {
-            width: 1.5,
+            width: 3,
             color: 'rgb(120,120,0)',
             dash: 'line'
         },
         name: ''
     };
 
-    var plotData = [trace_op_point, trace_ref_characteristic];
+    var trace_ref_characteristic1 = {
+        x: [0, -3],
+        y: [0.3, 0.3],
+        mode: 'lines',
+        line: {
+            width: 1.5,
+            color: 'rgb(120,120,0)',
+            dash: 'dash'
+        },
+        name: ''
+    };
+
+    var trace_ref_characteristic2 = {
+        x: [0, 3],
+        y: [1.5, 1.5],
+        mode: 'lines',
+        line: {
+            width: 1.5,
+            color: 'rgb(120,120,0)',
+            dash: 'dash'
+        },
+        name: ''
+    };
+
+    var trace_ref_characteristic3 = {
+        x: [-3, 3],
+        y: [0, 0],
+        mode: 'lines',
+        line: {
+            width: 3,
+            color: 'rgb(120,120,120)',
+            dash: 'line'
+        },
+        name: ''
+    };
+
+    var trace_ref_characteristic4 = {
+        x: [-1, -1],
+        y: [0, 2],
+        mode: 'lines',
+        line: {
+            width: 3,
+            color: 'rgb(120,120,120)',
+            dash: 'dash'
+        },
+        name: ''
+    };
+
+    var trace_ref_characteristic5 = {
+        x: [1, 1],
+        y: [0, 2],
+        mode: 'lines',
+        line: {
+            width: 3,
+            color: 'rgb(120,120,120)',
+            dash: 'dash'
+        },
+        name: ''
+    };
+    var plotData = [trace_op_point, trace_ref_characteristic, trace_ref_characteristic1, trace_ref_characteristic2, trace_ref_characteristic3, trace_ref_characteristic4, trace_ref_characteristic5];
     var layoutOpt = {
         title: "Satna Statcom Operating Point",
         plot_bgcolor: 'rgb(0,0,0)',
