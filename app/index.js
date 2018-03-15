@@ -5,7 +5,7 @@ window.onload = function () {
     apiServerBaseAddress = document.getElementById("serverBaseAddressInput").value;
     initializePlotDiv();
     fetchOperatingPointValue();
-    timerId = setInterval(fetchOperatingPointValue, 60000);
+    timerId = setInterval(fetchOperatingPointValue, 500);
 };
 
 // todo use relevant id here
@@ -45,8 +45,8 @@ function fetchOperatingPointValue() {
         if(results.constructor === Array && results.length >= 2){
             var x_result = results[0];
             var y_result = results[1];
-            plotDiv.data[0].x = [x_result.dval];
-            plotDiv.data[0].y = [y_result.dval];
+            plotDiv.data[0].x = [x_result["dval"]];
+            plotDiv.data[0].y = [y_result["dval"]];
         }
 
         plotDiv.layout.title = "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime;
