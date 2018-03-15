@@ -1,21 +1,33 @@
 var apiServerBaseAddress = 'http://wmrm0mc1:62448';
-var workerTimerId = null;
+var timerId = null;
 
 window.onload = function () {
     apiServerBaseAddress = document.getElementById("serverBaseAddressInput").value;
     initializePlotDiv();
-    fetchForecastValues();
-    workerTimerId = setInterval(fetchForecastValues, 60000);
+    fetchOperatingPointValue();
+    timerId = setInterval(fetchOperatingPointValue, 60000);
 };
 
+// todo use relevant id here
 var payLoadSources_g = [
     {
-        name: 'FREQUENCY',
+        name: 'Satna_STATCOM_Value',
         url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA1.A0047000', 'real')
     }];
 
-function fetchForecastValues() {
+var computeXYFromResult = function (result) {
+    // todo calculate x and y values from result
+    return {
+        x: result,
+        y: result
+    }
+};
+
+function fetchOperatingPointValue() {
     /* Get the all scada values from API start */
+    var todayDate = new Date();
+    var todayDateStr = makeTwoDigits(todayDate.getDate()) + "/" + makeTwoDigits(todayDate.getMonth() + 1) + "/" + todayDate.getFullYear();
+    var curTime = makeTwoDigits(todayDate.getHours()) + ":" + makeTwoDigits(todayDate.getMinutes());
     async.mapSeries(payLoadSources_g, fetchScadaValue, function (err, results) {
         if (err) {
             // handle error - do nothing since the all values are not fetched
@@ -25,15 +37,12 @@ function fetchForecastValues() {
         //All the values are available in the results Array 
         var plotDiv = document.getElementById('plotDiv');
         for (var i = 0; i < results.length; i++) {
-            //plotDiv.data[i].x = [];
-            plotDiv.data[i].y = [];
-            var demObjects = results[i];
-            for (var k = 0; k < demObjects.length; k++) {
-                //plotDiv.data[i].x.push(demObjects[k].timestamp);
-                plotDiv.data[i].y.push(demObjects[k].dval);
-            }
+            var result = results[i];
+            var xy_val = computeXYFromResult(result['dval']);
+            plotDiv.data[i].x = [xy_val.x];
+            plotDiv.data[i].y = [xy_val.y];
         }
-        plotDiv.layout.title = "WR Graphs: Actual Vs Yesterday " + todayDateStr + " " + curTime;
+        plotDiv.layout.title = "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime;
         Plotly.redraw(plotDiv);
     });
     /* Get the all scada values from API end */
@@ -41,46 +50,41 @@ function fetchForecastValues() {
 
 function initializePlotDiv() {
     var plotDiv = document.getElementById('plotDiv');
-    var minuteLabels = Array.apply(null, {length: 96}).map(Function.call, function (k) {
-        return getTimeStringFromMinutes(k * 15);
-    });
-    var oneMinuteLabels = Array.apply(null, {length: 1440}).map(Function.call, function (k) {
-        return getTimeStringFromMinutes(k);
-    });
-    var trace_freq = {
-        x: oneMinuteLabels,
-        y: [],
-        line: {
-            width: 1.5,
-            color: 'rgb(255,255,0)'
-        },
-        name: 'Frequency'
+    // https://plot.ly/javascript/line-and-scatter/
+    var trace_op_point = {
+        x: [1],
+        y: [1],
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Operating Point',
+        marker: {size: 12}
     };
 
-    var trace_freq_upper_lim = {
-        x: ['00:00', "23:59"],
-        y: [50.05, 50.05],
+    var trace_x_axis = {
+        x: [-10, 10],
+        y: [0, 0],
         line: {
             width: 1.5,
-            color: 'rgb(120,120,0)',
+            color: 'rgb(120,120,120)',
             dash: 'line'
         },
         name: ''
     };
-    var trace_freq_50_hz = {
-        x: ['00:00', "23:59"],
-        y: [50, 50],
+    var trace_y_axis = {
+        x: [0, 0],
+        y: [-10, 10],
         line: {
             width: 1.5,
-            color: 'rgb(120,120,0)',
+            color: 'rgb(120,120,120)',
             dash: 'dash'
         },
         name: ''
     };
 
-    var trace_freq_lower_lim = {
-        x: ['00:00', "23:59"],
-        y: [49.9, 49.9],
+    var trace_ref_characteristic = {
+        x: [-5, -3, 3, 5],
+        y: [-5, -5, 5, 5],
+        mode: 'lines',
         line: {
             width: 1.5,
             color: 'rgb(120,120,0)',
@@ -89,14 +93,13 @@ function initializePlotDiv() {
         name: ''
     };
 
-    var plotData = [trace_freq, trace_freq_upper_lim, trace_freq_lower_lim];
+    var plotData = [trace_op_point, trace_ref_characteristic];
     var layoutOpt = {
         title: "Satna Statcom Operating Point",
         plot_bgcolor: 'rgb(0,0,0)',
         paper_bgcolor: 'rgb(0,0,0)',
         xaxis: {
             dtick: 8,
-            domain: [0, 1],
             tickcolor: 'rgb(100,100,100)',
             tickfont: {
                 size: 25,
@@ -104,8 +107,7 @@ function initializePlotDiv() {
             }
         },
         yaxis: {
-            title: "MW",
-            domain: [0.55, 1],
+            title: "Y AXIS TITLE",
             tickcolor: 'rgb(100,100,100)',
             tickfont: {
                 size: 25,
@@ -114,9 +116,7 @@ function initializePlotDiv() {
             titlefont: {
                 size: 20,
                 color: '#000000'
-            },
-            dtick: 4000,
-            range: [30000, 50000]
+            }
         },
         margin: {l: 70, pad: 4, t: 80},
         legend: {
@@ -133,7 +133,6 @@ function initializePlotDiv() {
     };
     Plotly.newPlot(plotDiv, plotData, layoutOpt);
 }
-
 
 
 function makeTwoDigits(x) {

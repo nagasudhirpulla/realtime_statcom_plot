@@ -1,4 +1,4 @@
-var fetchScadaValue = function(urlStrObj, callback) {
+var fetchScadaValue = function (urlStrObj, callback) {
     var urlStr = urlStrObj.url;
     $.ajax({
         //fetch revisions data from sever
@@ -17,7 +17,7 @@ var fetchScadaValue = function(urlStrObj, callback) {
     });
 };
 
-var createUrl = function(serverBaseAddress, pnt, historyType, strtime, endtime, secs, type) {
+var createUrl = function (serverBaseAddress, pnt, historyType, strtime, endtime, secs, type) {
     var url = "";
     if (historyType == "real") {
         url = serverBaseAddress + "/api/values/" + historyType + "?pnt=" + pnt;
