@@ -11,7 +11,11 @@ window.onload = function () {
 // todo use relevant id here
 var payLoadSources_g = [
     {
-        name: 'Satna_STATCOM_Value',
+        name: 'Satna_STATCOM_x_value',
+        url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA1.A0047000', 'real')
+    },
+    {
+        name: 'Satna_STATCOM_y_value',
         url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA1.A0047000', 'real')
     }];
 
@@ -36,12 +40,15 @@ function fetchOperatingPointValue() {
         }
         //All the values are available in the results Array 
         var plotDiv = document.getElementById('plotDiv');
-        for (var i = 0; i < results.length; i++) {
-            var result = results[i];
-            var xy_val = computeXYFromResult(result['dval']);
-            plotDiv.data[i].x = [xy_val.x];
-            plotDiv.data[i].y = [xy_val.y];
+
+        // updating the plot operating point
+        if(results.constructor === Array && results.length >= 2){
+            var x_result = results[0];
+            var y_result = results[1];
+            plotDiv.data[0].x = [x_result.dval];
+            plotDiv.data[0].y = [y_result.dval];
         }
+
         plotDiv.layout.title = "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime;
         Plotly.redraw(plotDiv);
     });
