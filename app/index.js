@@ -5,7 +5,7 @@ window.onload = function () {
     apiServerBaseAddress = document.getElementById("serverBaseAddressInput").value;
     initializePlotDiv();
     fetchOperatingPointValue();
-    timerId = setInterval(fetchOperatingPointValue, 500);
+    timerId = setInterval(fetchOperatingPointValue, 60000);
 };
 
 // todo use relevant id here
@@ -19,6 +19,7 @@ var payLoadSources_g = [
         url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA1.A0047000', 'real')
     }];
 
+// not required now
 var computeXYFromResult = function (result) {
     // todo calculate x and y values from result
     return {
