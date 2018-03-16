@@ -4,8 +4,8 @@ var timerId = null;
 window.onload = function () {
     apiServerBaseAddress = document.getElementById("serverBaseAddressInput").value;
     initializePlotDiv();
-    //fetchOperatingPointValue();
-    //timerId = setInterval(fetchOperatingPointValue, 1000);
+    fetchOperatingPointValue();
+    timerId = setInterval(fetchOperatingPointValue, 1000);
 };
 
 var payLoadSources_g = [
