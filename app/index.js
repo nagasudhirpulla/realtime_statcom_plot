@@ -51,8 +51,8 @@ function fetchOperatingPointValue() {
         plotDiv.layout.title = "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime;
         Plotly.redraw(plotDiv);
         // trigger hover on the operating point
-        Plotly.Fx.hover('plotDiv',[
-            {curveNumber:0, pointNumber:0}
+        Plotly.Fx.hover('plotDiv', [
+            {curveNumber: 0, pointNumber: 0}
         ]);
     });
     /* Get the all scada values from API end */
@@ -116,6 +116,27 @@ function initializePlotDiv() {
         textfont: {
             family: 'sans serif',
             size: 20,
+            color: '#aaaaaa'
+        },
+        mode: 'text',
+        showlegend: false,
+        line: {
+            width: 3,
+            color: 'rgb(120,120,0)',
+            dash: 'line'
+        },
+        name: 'Statcom Characteristic',
+        hoverinfo: 'none'
+    };
+
+    var trace_ref_char_annotations_coords = {
+        x: [-1.188, -1.53, -0.417, -0.28, 0, 0, 0.6, 0.95, 1.732, 2.13, 1.732, 0.791, 0.754, 0.392, 0.415, 0.392, 0, 0, 0, -0.417],
+        y: [0.23, 0.82, 0.85, 1.08, 1.01, 1.05, 1.14, 1.14, 1.01, 1.43, 1.1, 1.05, 0.9, 0.9, 1.05, 0.99, 0.99, 1.01, 0.95, 0.95],
+        text: ['1.188, 0.3', '1.452, 0.9', '0.417, 0.95', '0.444, 1.01', '', '', '0.415, 1.05', '0.791, 1.05', '1.732, 1.1', '2.033, 1.5', '', '', '0.754, 0.99', '0.392, 0.99'],
+        textposition: 'bottom',
+        textfont: {
+            family: 'sans serif',
+            size: 12,
             color: '#aaaaaa'
         },
         mode: 'text',
@@ -209,7 +230,7 @@ function initializePlotDiv() {
         hoverinfo: 'none'
     };
 
-    var plotData = [trace_op_point, trace_ref_characteristic, trace_ref_char_annotations, trace_ref_characteristic1, trace_ref_characteristic2, trace_ref_characteristic3, trace_ref_characteristic4, trace_ref_characteristic5];
+    var plotData = [trace_op_point, trace_ref_characteristic, trace_ref_char_annotations, trace_ref_char_annotations_coords, trace_ref_characteristic1, trace_ref_characteristic2, trace_ref_characteristic3, trace_ref_characteristic4, trace_ref_characteristic5];
     var layoutOpt = {
         title: "Satna Statcom Operating Point",
         annotations: [
@@ -315,8 +336,8 @@ function initializePlotDiv() {
     Plotly.newPlot(plotDiv, plotData, layoutOpt);
     // trigger hover on the operating point
     // https://plot.ly/javascript/hover-events/
-    Plotly.Fx.hover('plotDiv',[
-        {curveNumber:0, pointNumber:0}
+    Plotly.Fx.hover('plotDiv', [
+        {curveNumber: 0, pointNumber: 0}
     ]);
 }
 
