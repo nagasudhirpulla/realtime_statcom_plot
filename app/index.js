@@ -277,6 +277,90 @@ function initializePlotDiv() {
                 opacity: 0.8
             },
             {
+                x: 0,
+                y: 1.05,
+                xref: 'x',
+                yref: 'y',
+                text: 'O1',
+                showarrow: true,
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: '#ffffff'
+                },
+                align: 'center',
+                arrowhead: 2,
+                arrowsize: 1,
+                arrowwidth: 2,
+                arrowcolor: '#636363',
+                ax: 40,
+                ay: -30,
+                opacity: 0.8
+            },
+            {
+                x: 0,
+                y: 1.01,
+                xref: 'x',
+                yref: 'y',
+                text: 'O2',
+                showarrow: true,
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: '#ffffff'
+                },
+                align: 'center',
+                arrowhead: 2,
+                arrowsize: 1,
+                arrowwidth: 2,
+                arrowcolor: '#636363',
+                ax: -20,
+                ay: -30,
+                opacity: 0.8
+            },
+            {
+                x: 0,
+                y: 0.99,
+                xref: 'x',
+                yref: 'y',
+                text: 'O3',
+                showarrow: true,
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: '#ffffff'
+                },
+                align: 'center',
+                arrowhead: 2,
+                arrowsize: 1,
+                arrowwidth: 2,
+                arrowcolor: '#636363',
+                ax: 30,
+                ay: 20,
+                opacity: 0.8
+            },
+            {
+                x: 0,
+                y: 0.95,
+                xref: 'x',
+                yref: 'y',
+                text: 'O4',
+                showarrow: true,
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: '#ffffff'
+                },
+                align: 'center',
+                arrowhead: 2,
+                arrowsize: 1,
+                arrowwidth: 2,
+                arrowcolor: '#636363',
+                ax: -30,
+                ay: 20,
+                opacity: 0.8
+            },
+            {
                 x: -1.9,
                 y: 1.3,
                 xref: 'x',
