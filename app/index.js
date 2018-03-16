@@ -4,11 +4,10 @@ var timerId = null;
 window.onload = function () {
     apiServerBaseAddress = document.getElementById("serverBaseAddressInput").value;
     initializePlotDiv();
-    fetchOperatingPointValue();
-    timerId = setInterval(fetchOperatingPointValue, 500);
+    //fetchOperatingPointValue();
+    //timerId = setInterval(fetchOperatingPointValue, 1000);
 };
 
-// todo use relevant id here
 var payLoadSources_g = [
     {
         name: 'Satna_STATCOM_x_value',
@@ -19,8 +18,8 @@ var payLoadSources_g = [
         url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA3.A0106098', 'real')
     }];
 
+// not required
 var computeXYFromResult = function (result) {
-    // todo calculate x and y values from result
     return {
         x: result,
         y: result
@@ -51,6 +50,10 @@ function fetchOperatingPointValue() {
 
         plotDiv.layout.title = "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime;
         Plotly.redraw(plotDiv);
+        // trigger hover on the operating point
+        Plotly.Fx.hover('plotDiv',[
+            {curveNumber:0, pointNumber:0}
+        ]);
     });
     /* Get the all scada values from API end */
 }
@@ -67,9 +70,11 @@ function initializePlotDiv() {
         marker: {size: 12}
     };
 
+    // not required
     var trace_x_axis = {
         x: [-10, 10],
         y: [0, 0],
+        showlegend: false,
         line: {
             width: 1.5,
             color: 'rgb(120,120,120)',
@@ -77,13 +82,16 @@ function initializePlotDiv() {
         },
         name: ''
     };
+
+    // not required
     var trace_y_axis = {
         x: [0, 0],
-        y: [-10, 10],
+        y: [0, 2],
+        showlegend: false,
         line: {
             width: 1.5,
             color: 'rgb(120,120,120)',
-            dash: 'dash'
+            dash: 'line'
         },
         name: ''
     };
@@ -97,107 +105,219 @@ function initializePlotDiv() {
             color: 'rgb(120,120,0)',
             dash: 'line'
         },
-        name: ''
+        name: 'Statcom Characteristic'
+    };
+
+    var trace_ref_char_annotations = {
+        x: [-1.188, -1.48, -0.417, -0.444, 0, 0, 0.435, 0.795, 1.732, 2.08, 1.732, 0.791, 0.754, 0.392, 0.415, 0.392, 0, 0, 0, -0.417],
+        y: [0.3, 0.9, 0.92, 1.1, 1.01, 1.05, 1.15, 1.15, 1.08, 1.5, 1.1, 1.05, 0.97, 0.97, 1.05, 0.99, 0.99, 1.01, 0.95, 0.95],
+        text: ['A', 'B', 'C', 'D', '', '', 'E', 'F', 'G', 'H', '', '', 'I', 'K'],
+        textposition: 'bottom',
+        textfont: {
+            family: 'sans serif',
+            size: 20,
+            color: '#aaaaaa'
+        },
+        mode: 'text',
+        showlegend: false,
+        line: {
+            width: 3,
+            color: 'rgb(120,120,0)',
+            dash: 'line'
+        },
+        name: 'Statcom Characteristic',
+        hoverinfo: 'none'
     };
 
     var trace_ref_characteristic1 = {
         x: [0, -3],
         y: [0.3, 0.3],
         mode: 'lines',
+        showlegend: false,
         line: {
-            width: 1.5,
+            width: 1,
             color: 'rgb(120,120,0)',
             dash: 'dash'
         },
-        name: ''
+        name: 'y = 0.3 line',
+        hoverinfo: 'none'
     };
 
     var trace_ref_characteristic2 = {
         x: [0, 3],
         y: [1.5, 1.5],
         mode: 'lines',
+        showlegend: false,
         line: {
-            width: 1.5,
+            width: 1,
             color: 'rgb(120,120,0)',
             dash: 'dash'
         },
-        name: ''
+        name: 'y = 1.5 line',
+        hoverinfo: 'none'
     };
 
     var trace_ref_characteristic3 = {
         x: [-3, 3],
         y: [0, 0],
         mode: 'lines',
+        showlegend: false,
         line: {
             width: 3,
             color: 'rgb(120,120,120)',
             dash: 'line'
         },
-        name: ''
+        name: '',
+        hoverinfo: 'none'
     };
 
     var trace_ref_characteristic4 = {
         x: [-1, -1],
         y: [0, 2],
         mode: 'lines',
+        showlegend: false,
         line: {
-            width: 3,
-            color: 'rgb(120,120,120)',
+            width: 1,
+            color: 'rgb(80,80,80)',
             dash: 'dash'
         },
-        name: ''
+        name: 'x = -1 line',
+        hoverinfo: 'none'
     };
 
     var trace_ref_characteristic5 = {
         x: [1, 1],
         y: [0, 2],
         mode: 'lines',
+        showlegend: false,
         line: {
-            width: 3,
-            color: 'rgb(120,120,120)',
+            width: 1,
+            color: 'rgb(80,80,80)',
             dash: 'dash'
         },
-        name: ''
+        name: 'x = 1 line',
+        hoverinfo: 'none'
     };
-    var plotData = [trace_op_point, trace_ref_characteristic, trace_ref_characteristic1, trace_ref_characteristic2, trace_ref_characteristic3, trace_ref_characteristic4, trace_ref_characteristic5];
+
+    var trace_abcd = {
+        x: [-1.188],
+        y: [0.3],
+        mode: 'text',
+        showlegend: false,
+        text: ['A'],
+        name: 'abcd trace',
+        hoverinfo: 'none'
+    };
+
+    var plotData = [trace_op_point, trace_ref_characteristic, trace_ref_char_annotations, trace_ref_characteristic1, trace_ref_characteristic2, trace_ref_characteristic3, trace_ref_characteristic4, trace_ref_characteristic5];
     var layoutOpt = {
         title: "Satna Statcom Operating Point",
+        annotations: [
+            {
+                x: 0.8,
+                y: -0.1,
+                xref: 'x',
+                yref: 'y',
+                text: 'Inductive',
+                showarrow: true,
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: '#ffffff'
+                },
+                align: 'center',
+                arrowhead: 2,
+                arrowsize: 1,
+                arrowwidth: 2,
+                arrowcolor: '#636363',
+                ax: -90,
+                ay: 0,
+                opacity: 0.8
+            },
+            {
+                x: -0.8,
+                y: -0.1,
+                xref: 'x',
+                yref: 'y',
+                text: 'Capacitive',
+                showarrow: true,
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: '#ffffff'
+                },
+                align: 'center',
+                arrowhead: 2,
+                arrowsize: 1,
+                arrowwidth: 2,
+                arrowcolor: '#636363',
+                ax: 90,
+                ay: 0,
+                opacity: 0.8
+            },
+            {
+                x: -1.9,
+                y: 1.3,
+                xref: 'x',
+                yref: 'y',
+                text: 'O4-C MSC is on<br>C-B  STATCOM + MSC<br>B-A  STATCOM + MSC<br>C-D  MSC is on<br>D-O2 MSC is off<br>O1-E #1MSR is on<br>E-F  #2MSR is on<br>F-G  STATCOM + #1MSR + #2MSR<br>G-H  STATCOM + #1MSR + #2MSR<br>F-I  #1MSR + #2MSR<br>E-K  #1MSR<br>I-K  #1MSR is off<br>K-O3 #2MSR is off',
+                showarrow: false,
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: '#cccccc'
+                },
+                align: 'left',
+                opacity: 0.8
+            }
+        ],
         plot_bgcolor: 'rgb(0,0,0)',
         paper_bgcolor: 'rgb(0,0,0)',
         xaxis: {
-            dtick: 8,
+            title: "I_stat (pu)",
+            titlefont: {
+                color: '#aaaaaa'
+            },
             tickcolor: 'rgb(100,100,100)',
             tickfont: {
-                size: 25,
+                size: 15,
                 color: 'rgb(200,200,200)'
-            }
+            },
+            range: [-2.5, 2.5]
         },
         yaxis: {
-            title: "Y AXIS TITLE",
+            title: "Upcc (pu)",
             tickcolor: 'rgb(100,100,100)',
             tickfont: {
-                size: 25,
+                size: 15,
                 color: 'rgb(200,200,200)'
             },
             titlefont: {
                 size: 20,
-                color: '#000000'
-            }
+                color: '#aaaaaa'
+            },
+            range: [-0.1, 1.7]
         },
-        margin: {l: 70, pad: 4, t: 80},
+        margin: {l: 70, pad: 10, t: 60, b: 0},
         legend: {
+            y: -0.1,
             orientation: 'h',
             font: {
-                size: 25,
+                size: 15,
                 color: 'rgb(200,200,200)'
             }
         },
         titlefont: {
-            size: 35,
+            size: 25,
             color: 'rgb(200,200,200)'
         }
     };
     Plotly.newPlot(plotDiv, plotData, layoutOpt);
+    // trigger hover on the operating point
+    // https://plot.ly/javascript/hover-events/
+    Plotly.Fx.hover('plotDiv',[
+        {curveNumber:0, pointNumber:0}
+    ]);
 }
 
 

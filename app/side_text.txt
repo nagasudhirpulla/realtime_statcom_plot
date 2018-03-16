@@ -1,0 +1,13 @@
+O4-C MSC is on
+C-B  STATCOM + MSC
+B-A  STATCOM + MSC
+C-D  MSC is on
+D-O2 MSC is off
+O1-E #1MSR is on
+E-F  #2MSR is on
+F-G  STATCOM + #1MSR + #2MSR
+G-H  STATCOM + #1MSR + #2MSR
+F-I  #1MSR + #2MSR
+E-K  #1MSR
+I-K  #1MSR is off
+K-O3 #2MSR is off
