@@ -3,12 +3,43 @@
     <title>Satna Statcom Operating Point</title>
 </head>
 <body style="background-color:black">
-<input type="text" id="serverBaseAddressInput" value="http://wmrm0mc1:62448" style="width: 150px">
+<input type="text" id="serverBaseAddressInput" value="http://localhost:62448" style="width: 150px">
 
 <br>
 
-<div id="plotDiv" style="width: 99%; height: 99%;">
+<div id="plotDiv" style="width: 99%; height: 95%;">
     <!-- Plotly chart will be drawn inside this DIV -->
+</div>
+<div>
+    <input type="range" id="videoTimeSlider" min="0" max="1440" value="0" step="1" style="margin-left:1%;width: 60%"
+           onchange="updateFrameFromSlider()">
+    <span id="videoTimeString"></span>
+    <span style="padding-left:15px;"></span>
+    <button onclick="startFrameFetching()">PLAY</button>
+    <button onclick="pauseFrameFetching()">PAUSE</button>
+</div>
+<div id="controlInputs" style="margin:10px 5px 5px 10px;"><!--top right bottom left-->
+    <span id="playbackStatus" style="color: white"></span>
+    <span id="playbackStatusPaused" style="color: white"></span>
+    <span style="padding-left:20px;"></span>
+    <input id="jumpToFrameInput" type="number" value="0" style="width:45px;padding-left: 5px"/>
+    <button onclick="jumpToFrameGUI()">JUMP TO FRAME</button>
+    <span style="padding-left:20px;"></span>
+    <input id="frameRateInput" type="number" value="5" style="width:35px;padding-left: 5px"/>
+    <button onclick="setFrameRateGUI()">SET FRAME RATE</button>
+    <br><br>
+    <span style="padding-left:15px;"></span>
+    <input id="cachePlayIntervalInput" type="number" min="30" max="1000" value="200" placeholder="cacheInterval">
+    <button id="setCacheIntervalButton" onclick="setCachePlayInterval()">SET PLAYBACK INTERVAL</button>
+    <br><br>
+    <input type="text" id="fetchDateInput" value="" placeholder="yyyy-mm-dd">
+    <input type="text" id="fetchDateToInput" value="" placeholder="yyyy-mm-dd">
+    <button onclick="fetchDataForDate()">Fetch</button>
+    <br><br>
+    <button onclick="startFetching()">Start_Real_Fetching</button>
+    <button onclick="pauseFetching()">Stop_Real_Fetching</button>
+    <br><br>
+    <!--<input type="text" value="http://wmrm0mc1:62448" id="serverBaseAddressInput">-->
 </div>
 
 <div id="console"
@@ -19,8 +50,12 @@
 <script src="./libs/js/jquery.min.js"></script>
 <script src="./libs/js/plotly-latest.min.js"></script>
 <script src="./libs/js/async.min.js"></script>
+<script src="utils.js"></script>
 <script src="consoleFunctions.js"></script>
+<script src="datapoints.js"></script>
+<script src="player.js"></script>
 <script src="scada_fetcher.js"></script>
+<script src="data_fetch.js"></script>
 <script src="index.js"></script>
 </body>
 </html>

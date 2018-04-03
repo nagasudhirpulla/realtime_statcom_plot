@@ -1,29 +1,31 @@
-var apiServerBaseAddress = 'http://wmrm0mc1:62448';
-var timerId = null;
+var timingVar_;
+var isBusy_ = false;
+var isPlayingReal_ = false;
+var dataFetchPeriodMs = 1000;
+
+//Timing function
+function startFetching() {
+    // stop Frames playing also
+    pauseFrameFetching();
+    pauseFetching();
+    apiServerBaseAddress_g = document.getElementById("serverBaseAddressInput").value;
+    console.log("Starting Server Data Fetch", "info");
+    isPlayingReal_ = true;
+    timingVar_ = setInterval(fetchOperatingPointValue, dataFetchPeriodMs);
+}
+
+//Timing function
+function pauseFetching() {
+    isPlayingReal_ = false;
+    console.log("Pausing Server Data Fetch", "warning");
+    clearInterval(timingVar_);
+}
 
 window.onload = function () {
-    apiServerBaseAddress = document.getElementById("serverBaseAddressInput").value;
+    apiServerBaseAddress_g = document.getElementById("serverBaseAddressInput").value;
     initializePlotDiv();
     fetchOperatingPointValue();
-    timerId = setInterval(fetchOperatingPointValue, 1000);
-};
-
-var payLoadSources_g = [
-    {
-        name: 'Satna_STATCOM_x_value',
-        url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA3.A0106099', 'real')
-    },
-    {
-        name: 'Satna_STATCOM_y_value',
-        url: createUrl(apiServerBaseAddress, 'WRLDCMP.SCADA3.A0106098', 'real')
-    }];
-
-// not required
-var computeXYFromResult = function (result) {
-    return {
-        x: result,
-        y: result
-    }
+    startFetching();
 };
 
 function fetchOperatingPointValue() {
@@ -37,25 +39,51 @@ function fetchOperatingPointValue() {
             // console.log("All values not fetched via API due to error: " + JSON.stringify(err));
             return;
         }
-        //All the values are available in the results Array 
-        var plotDiv = document.getElementById('plotDiv');
-
         // updating the plot operating point
         if (results.constructor === Array && results.length >= 2) {
             var x_result = results[0];
             var y_result = results[1];
-            plotDiv.data[0].x = [x_result["dval"]];
-            plotDiv.data[0].y = [y_result["dval"]];
+            updatePlot([x_result["dval"]], [y_result["dval"]], "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime);
         }
+        /*
+         //All the values are available in the results Array
+         var plotDiv = document.getElementById('plotDiv');
 
-        plotDiv.layout.title = "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime;
-        Plotly.redraw(plotDiv);
-        // trigger hover on the operating point
-        Plotly.Fx.hover('plotDiv', [
-            {curveNumber: 0, pointNumber: 0}
-        ]);
+         // updating the plot operating point
+         if (results.constructor === Array && results.length >= 2) {
+         var x_result = results[0];
+         var y_result = results[1];
+         plotDiv.data[0].x = [x_result["dval"]];
+         plotDiv.data[0].y = [y_result["dval"]];
+         }
+
+         plotDiv.layout.title = "Satna Statcom real time Operating Point " + todayDateStr + " " + curTime;
+         Plotly.redraw(plotDiv);
+         // trigger hover on the operating point
+         Plotly.Fx.hover('plotDiv', [
+         {curveNumber: 0, pointNumber: 0}
+         ]);
+         */
     });
     /* Get the all scada values from API end */
+}
+
+function updatePlot(xVals, yVals, title) {
+    var plotDiv = document.getElementById('plotDiv');
+
+    if (title != null) {
+        plotDiv.layout.title = title;
+    }
+
+    plotDiv.data[0].x = xVals;
+    plotDiv.data[0].y = yVals;
+
+    Plotly.redraw(plotDiv);
+
+    // trigger hover on the operating point
+    Plotly.Fx.hover('plotDiv', [
+        {curveNumber: 0, pointNumber: 0}
+    ]);
 }
 
 function initializePlotDiv() {
@@ -424,20 +452,3 @@ function initializePlotDiv() {
         {curveNumber: 0, pointNumber: 0}
     ]);
 }
-
-
-function makeTwoDigits(x) {
-    if (x < 10) {
-        return "0" + x;
-    }
-    else {
-        return x;
-    }
-}
-
-function getTimeStringFromMinutes(m) {
-    var hrs = parseInt(m / 60);
-    var mins = m - hrs * 60;
-    return makeTwoDigits(hrs) + ":" + makeTwoDigits(mins);
-}
-
