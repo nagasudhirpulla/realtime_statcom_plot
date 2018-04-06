@@ -64,6 +64,7 @@ function startFrameFetching() {
     //videoCanvas_.getContext("2d").clearRect(0, 0, borderCanvasLayer.getgetCanvas().width, borderCanvasLayer.getgetCanvas().height);
     pauseFrameFetching();
     console.log("Starting Frame Data Fetch", "info");
+    setIsFrameBusy(false);
     frameTimingVar_ = setInterval(getFromFrames, videoPlayInterval_);
 }
 
@@ -80,7 +81,7 @@ var isFrameBusy_ = false;
 //Timing function
 function getFromFrames() {
     if (getIsFrameBusy() == true) {
-        //return;
+        return;
     }
     setIsFrameBusy(true);
     //express frame fetch start
