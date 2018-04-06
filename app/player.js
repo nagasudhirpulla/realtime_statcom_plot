@@ -8,6 +8,10 @@ var timeFrames = {
     "frames": [] // array of {timestamp: timeStr, x: x, y: y} elements
 };
 
+function setCachePlayInterval(){
+	videoPlayInterval_ = Number(document.getElementById("cachePlayIntervalInput").value);
+}
+
 function getPlayerSliderVals() {
     return {min: playerEl_g.min, max: playerEl_g.max, pos: playerEl_g.value};
 }

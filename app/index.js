@@ -81,6 +81,7 @@ function updatePlot(xVals, yVals, title) {
     Plotly.redraw(plotDiv);
 
     // trigger hover on the operating point
+
     Plotly.Fx.hover('plotDiv', [
         {curveNumber: 0, pointNumber: 0}
     ]);
@@ -92,7 +93,6 @@ function initializePlotDiv() {
     var trace_op_point = {
         x: [1],
         y: [1],
-        mode: 'markers',
         type: 'scatter',
         name: 'Operating Point',
         marker: {size: 12}
@@ -128,6 +128,7 @@ function initializePlotDiv() {
         x: [-1.188, -1.452, -0.417, -0.444, 0, 0, 0.415, 0.791, 1.732, 2.033, 1.732, 0.791, 0.754, 0.392, 0.415, 0.392, 0, 0, 0, -0.417],
         y: [0.3, 0.9, 0.95, 1.01, 1.01, 1.05, 1.05, 1.05, 1.1, 1.5, 1.1, 1.05, 0.99, 0.99, 1.05, 0.99, 0.99, 1.01, 0.95, 0.95],
         mode: 'lines',
+        type: 'scatter',
         line: {
             width: 3,
             color: 'rgb(120,120,0)',
@@ -139,8 +140,9 @@ function initializePlotDiv() {
     var trace_ref_char_annotations = {
         x: [-1.188, -1.48, -0.417, -0.444, 0, 0, 0.435, 0.795, 1.732, 2.08, 1.732, 0.791, 0.754, 0.392, 0.415, 0.392, 0, 0, 0, -0.417],
         y: [0.3, 0.9, 0.92, 1.1, 1.01, 1.05, 1.15, 1.15, 1.08, 1.5, 1.1, 1.05, 0.97, 0.97, 1.05, 0.99, 0.99, 1.01, 0.95, 0.95],
-        text: ['A', 'B', 'C', 'D', '', '', 'E', 'F', 'G', 'H', '', '', 'I', 'K'],
+        text: ['A', 'B', 'C', 'D', '', '', 'E', 'F', 'G', 'H', '', '', 'I', 'K', "", "", "", "", "", ""],
         textposition: 'bottom',
+        type: "scatter",
         textfont: {
             family: 'sans serif',
             size: 20,
@@ -148,20 +150,16 @@ function initializePlotDiv() {
         },
         mode: 'text',
         showlegend: false,
-        line: {
-            width: 3,
-            color: 'rgb(120,120,0)',
-            dash: 'line'
-        },
-        name: 'Statcom Characteristic',
+        name: 'Statcom Characteristic 2',
         hoverinfo: 'none'
     };
 
     var trace_ref_char_annotations_coords = {
         x: [-1.188, -1.53, -0.417, -0.28, 0, 0, 0.6, 0.95, 1.732, 2.13, 1.732, 0.791, 0.754, 0.392, 0.415, 0.392, 0, 0, 0, -0.417],
         y: [0.23, 0.82, 0.85, 1.08, 1.01, 1.05, 1.14, 1.14, 1.01, 1.43, 1.1, 1.05, 0.9, 0.9, 1.05, 0.99, 0.99, 1.01, 0.95, 0.95],
-        text: ['1.188, 0.3', '1.452, 0.9', '0.417, 0.95', '0.444, 1.01', '', '', '0.415, 1.05', '0.791, 1.05', '1.732, 1.1', '2.033, 1.5', '', '', '0.754, 0.99', '0.392, 0.99'],
+        text: ["1.188, 0.3", "1.452, 0.9", "0.417, 0.95", "0.444, 1.01", "", "", "0.415, 1.05", "0.791, 1.05", "1.732, 1.1", "2.033, 1.5", "", "", "0.754, 0.99", "0.392, 0.99", "", "", "", "", "", ""],
         textposition: 'bottom',
+        type: "scatter",
         textfont: {
             family: 'sans serif',
             size: 12,
@@ -174,7 +172,7 @@ function initializePlotDiv() {
             color: 'rgb(120,120,0)',
             dash: 'line'
         },
-        name: 'Statcom Characteristic',
+        name: 'Statcom Characteristic 3',
         hoverinfo: 'none'
     };
 
@@ -216,7 +214,7 @@ function initializePlotDiv() {
             color: 'rgb(120,120,120)',
             dash: 'line'
         },
-        name: '',
+        name: 'name 3',
         hoverinfo: 'none'
     };
 
@@ -259,6 +257,7 @@ function initializePlotDiv() {
     };
 
     var plotData = [trace_op_point, trace_ref_characteristic, trace_ref_char_annotations, trace_ref_char_annotations_coords, trace_ref_characteristic1, trace_ref_characteristic2, trace_ref_characteristic3, trace_ref_characteristic4, trace_ref_characteristic5];
+    // https://codepen.io/plotly/pen/BNMROB
     var layoutOpt = {
         title: "Satna Statcom Operating Point",
         annotations: [
@@ -448,6 +447,7 @@ function initializePlotDiv() {
     Plotly.newPlot(plotDiv, plotData, layoutOpt);
     // trigger hover on the operating point
     // https://plot.ly/javascript/hover-events/
+
     Plotly.Fx.hover('plotDiv', [
         {curveNumber: 0, pointNumber: 0}
     ]);
