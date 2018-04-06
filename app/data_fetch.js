@@ -25,7 +25,7 @@ function getFromPointsDataServerForDate(dateString, dateStringTo) {
     for (var i = 0; i < payLoadSourcesHistory_g.length; i++) {
         payLoadSourcesHistory_g[i]['url'] = createUrl(apiServerBaseAddress_g, payLoadSourcesHistory_g[i]['pnt'], 'history', fromTimeStr, toTimeStr, 60, "snap");
         payLoadSourcesHistory_g[i]['startTime'] = fromTimeStr;
-        payLoadSourcesHistory_g[i]['endTime'] = fromTimeStr;
+        payLoadSourcesHistory_g[i]['endTime'] = toTimeStr;
     }
     setIsBusy(true);
 
